@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
-};
+// Every screen is personal and live, so nothing is prerendered or cached.
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

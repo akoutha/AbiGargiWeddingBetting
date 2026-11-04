@@ -10,7 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.118.0",
+    "@fontsource/hind": "^5.3.0",
+    "@fontsource/yeseva-one": "^5.3.0",
     "next": "16.4.5",
     "pg": "^8.23.1",
     "react": "19.3.0",

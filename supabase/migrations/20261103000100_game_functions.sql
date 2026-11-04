@@ -222,7 +222,7 @@ $$;
 create function guest_claim_name(p_guest uuid, p_pin_hash text) returns void
 language plpgsql set search_path = public as $$
 begin
-  update guests set pin_hash = p_pin_hash, joined_at = clock_timestamp()
+  update guests set pin_hash = p_pin_hash, joined_at = coalesce(joined_at, clock_timestamp())
   where id = p_guest and is_active and pin_hash is null;
   if not found then raise exception 'NAME_ALREADY_CLAIMED'; end if;
 end $$;
