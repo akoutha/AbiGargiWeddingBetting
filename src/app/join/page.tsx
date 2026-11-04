@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { currentGuest, hasAccess } from "@/lib/auth/session";
-import { activeGuests } from "@/lib/game/queries";
 import { AccessCodeForm, GuestPicker } from "@/components/join-forms";
 
 export default async function JoinPage() {
@@ -13,7 +12,7 @@ export default async function JoinPage() {
       {allowed ? (
         <>
           <p className="join-lead">Find your name to get your $1,000.</p>
-          <GuestPicker guests={await activeGuests()} />
+          <GuestPicker />
         </>
       ) : (
         <>

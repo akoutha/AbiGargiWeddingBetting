@@ -30,6 +30,14 @@ export const GAME_ERRORS = {
   SAME_WINNER: "That outcome is already the winner.",
   STAKE_TOO_LOW: "The minimum bet is $10.",
   UNRESOLVED_EVENTS: "Settle or void every open and locked event first.",
+  ADMIN_NOT_FOUND: "We couldn't find that admin.",
+  CANNOT_CHANGE_SELF: "You can't deactivate your own account.",
+  FUNCTION_NOT_FOUND: "We couldn't find that function.",
+  LOGIN_LOCKED: "Too many wrong tries. Wait 15 minutes and try again.",
+  NOT_OWNER: "Only the owner can do this.",
+  OUTCOME_HAS_BETS: "Guests have bet on this outcome, so it can't be changed. Void the event instead.",
+  RESET_NOT_CONFIRMED: "Type RESET to confirm.",
+  SETUP_ALREADY_DONE: "An owner account already exists. Sign in instead.",
 } as const;
 
 export type GameErrorCode = keyof typeof GAME_ERRORS;

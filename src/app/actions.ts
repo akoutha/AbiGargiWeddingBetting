@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { hashPin, isValidPin, verifyPin } from "@/lib/auth/pin";
+import { hashSecret, isValidPin, verifySecret } from "@/lib/auth/secret";
 import { endSession, grantAccess, hasAccess, requireGuest, startSession } from "@/lib/auth/session";
 import { query } from "@/lib/db";
 import { GAME_ERRORS, gameErrorMessage } from "@/lib/game/errors";
@@ -22,13 +22,25 @@ export async function submitAccessCode(_: FormState, form: FormData): Promise<Fo
   return { error: "That code doesn't match. Check your invitation or ask the wedding party." };
 }
 
+/** Finds names only after a few letters, so the full list never reaches a phone. */
+export async function searchGuests(term: string) {
+  const search = term.trim();
+  if (!(await hasAccess()) || search.length < 2) return [];
+  return query<{ id: string; display_name: string }>(
+    `select id, display_name from guests
+     where is_active and strpos(lower(display_name), lower($1)) > 0
+     order by lower(display_name) limit 12`,
+    [search],
+  );
+}
+
 export async function createPin(guestId: string, _: FormState, form: FormData): Promise<FormState> {
   if (!(await hasAccess())) redirect("/join");
   const pin = String(form.get("pin") ?? "");
   if (!isValidPin(pin)) return { error: "Enter 4 digits." };
   if (pin !== form.get("confirm")) return { error: "Those PINs don't match. Try again." };
   try {
-    await query("select guest_claim_name($1, $2)", [guestId, await hashPin(pin)]);
+    await query("select guest_claim_name($1, $2)", [guestId, await hashSecret(pin)]);
     await startSession(guestId);
   } catch (err) {
     return { error: failure(err).error };
@@ -42,7 +54,7 @@ export async function enterPin(guestId: string, _: FormState, form: FormData): P
   if (!isValidPin(pin)) return { error: "Enter 4 digits." };
   try {
     const [row] = await query<{ hash: string }>("select guest_begin_pin_attempt($1) as hash", [guestId]);
-    if (!(await verifyPin(pin, row.hash))) {
+    if (!(await verifySecret(pin, row.hash))) {
       return { error: "That PIN isn't right. After 5 wrong tries, this name locks for 15 minutes." };
     }
     await query("select guest_pin_succeeded($1)", [guestId]);

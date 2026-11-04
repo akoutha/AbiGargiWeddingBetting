@@ -83,11 +83,6 @@ export const gameSettings = cache(async () => {
   return row;
 });
 
-export const activeGuests = () =>
-  query<{ id: string; display_name: string }>(
-    "select id, display_name from guests where is_active order by lower(display_name)",
-  );
-
 export async function guestForJoin(guestId: string) {
   if (!/^[0-9a-f-]{36}$/i.test(guestId)) return null;
   const [row] = await query<{ id: string; display_name: string; has_pin: boolean }>(

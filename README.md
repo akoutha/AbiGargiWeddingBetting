@@ -2,7 +2,7 @@
 
 The fictional-money betting site described in [PRODUCT.md](./PRODUCT.md).
 
-The database layer and guest screens are built. The admin panel comes next.
+The database layer, guest screens, and admin panel are built.
 
 ## How it fits together
 
@@ -28,4 +28,13 @@ TEST_DATABASE_URL=postgres://postgres@localhost:5432/postgres npm test
 2. In the SQL Editor, run the files in `supabase/migrations/` in order.
 3. To try the guest screens with sample events and guests, also run `supabase/seed-demo.sql`. Don't run it on the real game.
 4. Copy `.env.example` to `.env.local` and fill it in. `DATABASE_URL` is the Transaction pooler connection string from Supabase's **Connect** button, with your database password in it. Never expose it to the browser.
-5. Run `npm run dev`. Guests can enter the code at `/join`, or scan a QR code for `/join/link?code=YOURCODE`.
+5. Add `WEDDING_ACCESS_CODE` and `ADMIN_SETUP_CODE`, then run `npm run dev`.
+6. Open `/admin/login` and create the owner account with the setup code.
+
+Guests enter the code at `/join`, or scan the QR code from the admin Game page.
+
+## Before the real game
+
+1. In the admin Game page, use **Reset test data**.
+2. Import the guest list in Guests.
+3. Create your functions and events.

@@ -1,16 +1,10 @@
 import { randomUUID } from "node:crypto";
-import { readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
-import { Client, Pool } from "pg";
+import { readFileSync } from "node:fs";
+import type { Pool } from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GAME_ERRORS } from "../src/lib/game/errors";
 
-// Runs against real Postgres, because locking and concurrency are the point.
-// TEST_DATABASE_URL must be a server you can create databases on.
-const baseUrl = process.env.TEST_DATABASE_URL ?? "postgres://postgres@localhost:5432/postgres";
-const dbName = `wedding_test_${process.pid}`;
-const migrationsDir = join(__dirname, "../supabase/migrations");
-const migrations = readdirSync(migrationsDir).sort().map((f) => join(migrationsDir, f));
+import { closeDb, migrations, openDb } from "./db";
 
 let pool: Pool;
 let admin: string;
@@ -54,37 +48,11 @@ async function balance(g: string) {
 const fails = (p: Promise<unknown>, code: string) => expect(p).rejects.toThrow(code);
 
 beforeAll(async () => {
-  const root = new Client(baseUrl);
-  await root.connect();
-  await root.query(`create database ${dbName}`);
-  await root.end();
-
-  const url = new URL(baseUrl);
-  url.pathname = `/${dbName}`;
-  pool = new Pool({ connectionString: url.toString(), max: 30 });
-
-  // Stand-ins for what Supabase provides. Harmless on a Supabase database.
-  await q(`do $$ begin
-    if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon; end if;
-    if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated; end if;
-    if not exists (select 1 from pg_roles where rolname = 'service_role') then create role service_role; end if;
-  end $$`);
-  await q("create schema if not exists auth");
-  await q("create table if not exists auth.users (id uuid primary key)");
-  for (const file of migrations) await pool.query(readFileSync(file, "utf8"));
-
-  const id = randomUUID();
-  await q("insert into auth.users (id) values ($1)", [id]);
-  await q("insert into admins (user_id, display_name, is_owner) values ($1, 'Abishek', true)", [id]);
-  admin = id;
+  ({ pool, admin } = await openDb("game"));
 });
 
 afterAll(async () => {
-  await pool?.end();
-  const root = new Client(baseUrl);
-  await root.connect();
-  await root.query(`drop database if exists ${dbName} with (force)`);
-  await root.end();
+  await closeDb(pool, "game");
 });
 
 beforeEach(async () => {

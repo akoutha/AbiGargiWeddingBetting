@@ -9,8 +9,8 @@ const SESSION_COOKIE = "wb_session";
 const ACCESS_COOKIE = "wb_access";
 const SESSION_DAYS = 60;
 
-const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
-const cookieOptions = (days: number) => ({
+export const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
+export const cookieOptions = (days: number) => ({
   httpOnly: true,
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV === "production",

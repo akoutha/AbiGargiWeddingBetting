@@ -29,7 +29,7 @@ h1, h2, p, ul, ol, dl, dd, fieldset { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
 fieldset { border: 0; min-width: 0; }
 a { color: inherit; }
-button, input { font: inherit; color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--forest); outline-offset: 2px; }
 .join :focus-visible, .purse :focus-visible, .tabs :focus-visible { outline-color: var(--cream); }
@@ -315,4 +315,96 @@ legend, .field-label, .review h2, .your-bet h2 { padding: 0; font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   .button { transition: none; }
+}
+
+/* Admin */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 4px max(16px, calc((100% - 728px) / 2)) 10px;
+  background: var(--forest);
+  color: var(--paper);
+}
+.admin-header > p { font: 400 1.35rem/1 var(--display); }
+.admin-header form { display: flex; align-items: center; gap: 12px; font-size: 1rem; }
+.admin { max-width: 760px; margin: 0 auto; padding: 12px 14px 104px; }
+.admin .page-title { padding-inline: 0; overflow-wrap: anywhere; }
+.panel { margin-top: 12px; padding: 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; }
+.panel h2 { margin-bottom: 8px; font: 400 1.3rem/1.2 var(--display); color: var(--forest-deep); }
+.panel p { margin-bottom: 8px; }
+.title-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.title-row .button { flex: none; min-height: 48px; }
+.status-note { color: var(--ink-soft); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stats div { padding: 10px 12px; background: var(--forest); color: var(--paper); border-radius: 8px; }
+.stats dt { font-size: .95rem; }
+.stats dd { font: 400 1.4rem/1.15 var(--display); overflow-wrap: anywhere; }
+.rows > li { padding: 10px 0; }
+.rows > li + li { border-top: 1px solid var(--line); }
+.row-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.row-item > a, .row-item > div { flex: 1; min-width: 0; text-decoration: none; }
+.row-item strong, .row-item small { display: block; }
+.row-item small, .bet-entry small { color: var(--ink-soft); font-size: .95rem; }
+.row-item > form .button { min-height: 44px; }
+.pill { flex: none; padding: 2px 10px; border: 1.5px solid var(--forest); border-radius: 999px; color: var(--forest); font-size: .95rem; font-weight: 600; }
+.pill[data-status="open"], .pill[data-status="won"] { background: var(--sage); }
+.pill[data-status="settled"] { background: var(--forest); color: var(--paper); }
+.pill[data-status="voided"], .pill[data-status="lost"], .pill[data-status="cancelled"] { border-color: var(--ink-soft); color: var(--ink-soft); }
+.bet-entry { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.bet-entry p { margin: 0; }
+.bet-question { display: block; text-decoration: none; color: var(--ink-soft); }
+
+.admin-form { display: grid; gap: 8px; }
+.admin-form > label, .filter-form label { font-weight: 600; }
+.admin input:not([type="radio"], [type="checkbox"], [type="hidden"], [type="file"]), .admin textarea, .admin select {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+.admin input:focus, .admin textarea:focus, .admin select:focus { border-color: var(--forest); outline: 2px solid var(--forest); outline-offset: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.actions.spaced, .spaced-text { margin-top: 12px; }
+.admin-form .actions { margin-top: 6px; }
+.button.danger { background: var(--error); border-color: var(--error); color: var(--paper); }
+.danger-panel { border-color: var(--error); }
+.confirm-text { margin: 4px 0 8px; font-weight: 600; }
+.inline-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.inline-form.grow > input:not(.short, [type="hidden"]) { flex: 1 1 160px; width: auto; }
+.inline-form .actions { flex-wrap: nowrap; }
+.inline-form .form-error, .inline-form .success { flex-basis: 100%; margin: 4px 0 0; }
+.inline-form .button { flex: none; min-height: 48px; }
+.admin input.short { width: 88px; flex: none; }
+.text-button { justify-self: start; min-height: 40px; padding: 4px 0; border: 0; background: none; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; }
+.text-button.on-dark { color: var(--paper); }
+.outcome-rows { display: grid; gap: 8px; margin-top: 8px; }
+.outcome-rows legend { font-weight: 600; margin-bottom: 4px; }
+.outcome-row { display: grid; grid-template-columns: 1fr 88px; gap: 8px; }
+.outcome-row .text-button { grid-column: 1 / -1; }
+.outcomes > li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.outcomes > li[data-winner] { margin-inline: -8px; padding-inline: 8px; background: var(--sage); }
+.outcome-head { display: flex; justify-content: space-between; gap: 12px; }
+.outcome-totals { margin: 6px 0; color: var(--ink-soft); font-size: 1rem; }
+.outcome-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.outcomes + .inline-form { margin-top: 12px; }
+.function-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.function-row .grow { flex: 1 1 260px; }
+.filter-form { display: grid; gap: 10px; }
+.filter-form label { display: grid; gap: 4px; }
+.check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 500; }
+.check input { width: 22px; height: 22px; accent-color: var(--forest); }
+details summary { min-height: 44px; padding: 8px 0; font-weight: 600; cursor: pointer; }
+.plain-list { margin-bottom: 8px; color: var(--ink-soft); }
+.import-preview { margin-top: 8px; padding-top: 8px; border-top: 2px dashed var(--forest); }
+.qr { width: 200px; margin: 8px 0; }
+.qr svg { display: block; width: 100%; height: auto; }
+.break { overflow-wrap: anywhere; color: var(--ink-soft); font-size: 1rem; }
+.panel a.button { display: inline-flex; }
+
+@media (min-width: 640px) {
+  .filter-form { grid-template-columns: repeat(3, 1fr) auto; align-items: end; }
 }
