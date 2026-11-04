@@ -375,4 +375,4 @@ Items with a default can stay as written unless Abishek wants to change them.
 | 10 | Should there be a maximum bet? | No, available balance is the limit |
 | 11 | Should all guests share one access code? | Yes |
 | 12 | What should the product be called? | Wedding Betting |
-| 13 | What should the visual theme be? | To be decided |
+| 13 | What should the visual theme be? | **Decided:** creams and forest green |
